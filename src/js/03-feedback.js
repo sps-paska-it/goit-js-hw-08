@@ -10,7 +10,7 @@ const dataForm = {
 
 populateEmailTextarea();
 feedbackForm.addEventListener('submit', onFormSubmit );
-feedbackForm.addEventListener('input', lodashThrottle(onEmailTextareaInput, 500) );
+feedbackForm.addEventListener('input', lodashThrottle(onEmailTextareaInput, 1000));
 
 function onFormSubmit(e) {
     e.preventDefault();
@@ -20,16 +20,20 @@ function onFormSubmit(e) {
 
 function onEmailTextareaInput(e) {
     dataForm[e.target.name] = e.target.value;
+    console.log(e.target.value);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(dataForm));
+    console.log(JSON.stringify(dataForm));
 }
 
 function populateEmailTextarea() {
-    const saveMassage = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (saveMassage.message !== '' && saveMassage.email !== '') {
-        console.log(saveMassage);
+    const saveMassage = localStorage.getItem(STORAGE_KEY);
+    console.log(saveMassage);
+    if (saveMassage) {
+        const saveMassageObject = JSON.parse(saveMassage);
+        console.log(saveMassageObject.email);
         const email = document.querySelector('input');
-        email.value = saveMassage.email;
+        email.value = saveMassageObject.email;
         const textarea = document.querySelector('textarea');
-        textarea.value = saveMassage.message;
+        textarea.value = saveMassageObject.message;
     }
 };
